@@ -13,10 +13,12 @@ import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolMaterial;
@@ -30,8 +32,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.RaycastContext.FluidHandling;
+
 import org.jetbrains.annotations.Nullable;
 import rearth.oritech.Oritech;
 import rearth.oritech.client.renderers.PromethiumToolRenderer;
@@ -81,8 +86,20 @@ public class PromethiumPickaxeItem extends MiningToolItem implements GeoItem {
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         
         if (!world.isClient && miner instanceof PlayerEntity player) {
-            if (isAreaEnabled(stack)) {
-                var breakPositions = List.of(new Vec3i(0, 1, 0), new Vec3i(0, -1, 0));
+            if (isAreaEnabled(stack) && !player.isInPose(EntityPose.CROUCHING)) {
+                List<Vec3i> breakPositions;
+                var blockSide = Item.raycast(world, player, FluidHandling.ANY).getSide();
+                if (blockSide == Direction.UP || blockSide == Direction.DOWN) {
+                    var direction = player.getHorizontalFacing();
+                    if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+                        breakPositions = List.of(new Vec3i(0, 0, 1), new Vec3i(0, 0, -1));
+                    } else {
+                        breakPositions = List.of(new Vec3i(1, 0, 0), new Vec3i(-1, 0, 0));
+                    }
+                } else {
+                    breakPositions = List.of(new Vec3i(0, 1, 0), new Vec3i(0, -1, 0));
+                }
+
                 for (var offset : breakPositions) {
                     var worldPos = pos.add(offset);
                     var worldState = world.getBlockState(worldPos);

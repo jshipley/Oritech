@@ -21,10 +21,10 @@ public final class OritechClient {
         ClientTickEvents.START_CLIENT_TICK.register(Helpers::onClientTickEvent);
         LivingEntityFeatureRenderEvents.ALLOW_CAPE_RENDER.register(player -> !(player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BaseJetpackItem));
 
-        WorldRenderEvents.BLOCK_OUTLINE.register(this::renderBlockOutline);
+        WorldRenderEvents.BLOCK_OUTLINE.register(OritechClient::renderBlockOutline);
     }
 
-    public boolean renderBlockOutline(WorldRenderContext worldRenderContext, WorldRenderContext.BlockOutlineContext blockOutlineContext) {
+    public static boolean renderBlockOutline(WorldRenderContext worldRenderContext, WorldRenderContext.BlockOutlineContext blockOutlineContext) {
         BlockOutlineRenderer.render(worldRenderContext.world(), worldRenderContext.camera(), worldRenderContext.tickCounter(), worldRenderContext.matrixStack(), worldRenderContext.consumers(), worldRenderContext.gameRenderer(), worldRenderContext.projectionMatrix(), worldRenderContext.lightmapTextureManager(), worldRenderContext.worldRenderer());
         return true;
     }

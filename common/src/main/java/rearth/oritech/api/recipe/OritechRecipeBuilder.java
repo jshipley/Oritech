@@ -3,7 +3,6 @@ package rearth.oritech.api.recipe;
 import rearth.oritech.Oritech;
 import rearth.oritech.init.recipes.OritechRecipe;
 import rearth.oritech.init.recipes.OritechRecipeType;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
@@ -65,11 +64,11 @@ public abstract class OritechRecipeBuilder {
     }
 
     public OritechRecipeBuilder fluidInput(Fluid in, float bucketAmount) {
-        return fluidInput(FluidStack.create(in, (long)(bucketAmount * FluidConstants.BUCKET)));
+        return fluidInput(FluidStack.create(in, (long)(bucketAmount * FluidStack.bucketAmount())));
     }
 
     public OritechRecipeBuilder fluidInput(Fluid in) {
-        return fluidInput(FluidStack.create(in, FluidConstants.BUCKET));
+        return fluidInput(FluidStack.create(in, FluidStack.bucketAmount()));
     }
 
     public OritechRecipeBuilder fluidOutput(FluidStack out) {
@@ -78,11 +77,11 @@ public abstract class OritechRecipeBuilder {
     }
 
     public OritechRecipeBuilder fluidOutput(Fluid out, float bucketAmount) {
-        return fluidOutput(FluidStack.create(out, (long)(bucketAmount * FluidConstants.BUCKET)));
+        return fluidOutput(FluidStack.create(out, (long)(bucketAmount * FluidStack.bucketAmount())));
     }
 
     public OritechRecipeBuilder fluidOutput(Fluid out) {
-        return fluidOutput(FluidStack.create(out, FluidConstants.BUCKET));
+        return fluidOutput(FluidStack.create(out, FluidStack.bucketAmount()));
     }
 
     public OritechRecipeBuilder result(ItemStack out) {

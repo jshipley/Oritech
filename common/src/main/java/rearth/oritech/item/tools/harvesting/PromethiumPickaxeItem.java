@@ -104,7 +104,7 @@ public class PromethiumPickaxeItem extends MiningToolItem implements GeoItem {
             var isArea = !wasArea;
             setAreaEnabled(stack, isArea);
             
-            user.sendMessage(isArea ? Text.translatable("message.oritech.tool_mode.area_effect") : Text.translatable("message.oritech.tool_mode.silk_touch"));
+            user.sendMessage(isArea ? Text.translatable("message.oritech.tool_mode.area_effect") : Text.translatable("message.oritech.tool_mode.silk_touch"), false);
         }
         
         return super.use(world, user, hand);

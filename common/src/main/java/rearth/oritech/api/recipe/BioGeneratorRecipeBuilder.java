@@ -1,16 +1,18 @@
 package rearth.oritech.api.recipe;
 
+import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class BioGeneratorRecipeBuilder extends OritechRecipeBuilder {
 
-    protected BioGeneratorRecipeBuilder() {
-        super(RecipeContent.BIO_GENERATOR, "biogen");
+    protected BioGeneratorRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.BIO_GENERATOR, "biogen");
     }
 
-    public static OritechRecipeBuilder build() {
-        return new BioGeneratorRecipeBuilder();
+    public static OritechRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new BioGeneratorRecipeBuilder(registryLookup);
     }
 
     @Override

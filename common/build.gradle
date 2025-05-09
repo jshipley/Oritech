@@ -14,24 +14,24 @@ dependencies {
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 
     // owo lib (or owo-lib-neoforge)
-    modImplementation "io.wispforest:owo-lib:0.12.15+1.21"
-    annotationProcessor modImplementation("io.wispforest:owo-lib:0.12.15+1.21")
+    modImplementation "io.wispforest:owo-lib:${owo_version}"
+    annotationProcessor modImplementation("io.wispforest:owo-lib:${owo_version}")
 
     // geckolib
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.21.1:4.6.6"
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.21.4:${geckolib_version}"
 
     // EMI
     // modCompileOnly "dev.emi:emi-xplat-intermediary:${emi_version}:api"
-    modCompileOnly "dev.emi:emi-fabric:${emi_version}"
+    // modCompileOnly "dev.emi:emi-fabric:${emi_version}"
 
     // REI
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:16.0.754"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
 
     // JEI
-    modCompileOnly "mezz.jei:jei-${minecraft_version}-common-api-intermediary:19.21.0.246"
+    // modCompileOnly "mezz.jei:jei-${minecraft_version}-common-api-intermediary:19.21.0.246"
 
     // JADE (needed for addon)
-    modImplementation "curse.maven:jade-324717:5639994"
+    modImplementation "curse.maven:jade-324717:6155088"
 
     // oracle index
     modCompileOnly "curse.maven:oracle-index-1206582:6300146"
@@ -40,6 +40,11 @@ dependencies {
 
 sourceSets {
     main {
+        java {
+            srcDir "src"
+            exclude "**/jei/**"
+            exclude "**/emi/**"
+        }
         resources.srcDir "src/main/generated"
         resources.exclude ".cache"
         // exclude compat recipes from common because they're loader specific

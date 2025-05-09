@@ -4,21 +4,29 @@ import dev.architectury.hooks.fluid.FluidStackHooks;
 import rearth.oritech.Oritech;
 import rearth.oritech.init.recipes.OritechRecipe;
 import rearth.oritech.init.recipes.OritechRecipeType;
-import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.google.common.base.Optional;
 
 import dev.architectury.fluid.FluidStack;
+
+import static rearth.oritech.api.recipe.util.RecipeHelpers.of;
 
 public abstract class OritechRecipeBuilder {
 
@@ -31,10 +39,12 @@ public abstract class OritechRecipeBuilder {
     protected float timeMultiplier = 1f;
     protected boolean addToGrinder;
     private final String resourcePath;
+    protected final RegistryWrapper.WrapperLookup registryLookup;
 
-    protected OritechRecipeBuilder(OritechRecipeType type, String resourcePath) {
+    protected OritechRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup, OritechRecipeType type, String resourcePath) {
         this.type = type;
         this.resourcePath = resourcePath;
+        this.registryLookup = registryLookup;
     }
 
     public OritechRecipeBuilder input(List<Ingredient> in) {
@@ -56,7 +66,7 @@ public abstract class OritechRecipeBuilder {
     }
 
     public OritechRecipeBuilder input(TagKey<Item> in) {
-        return input(Ingredient.fromTag(in));
+        return input(of(registryLookup, in));
     }
 
     public OritechRecipeBuilder fluidInput(FluidStack in) {
@@ -144,7 +154,7 @@ public abstract class OritechRecipeBuilder {
         validate(id);
         
         exporter.accept(
-            id,
+            recipeKey(id),
             new OritechRecipe(
                 (int)(time * timeMultiplier),
                 inputs != null ? inputs : List.of(),
@@ -153,5 +163,9 @@ public abstract class OritechRecipeBuilder {
                 fluidInput != null ? fluidInput : FluidStack.empty(),
                 fluidOutput != null ? fluidOutput : FluidStack.empty()),
             null);
+    }
+
+    private RegistryKey<Recipe<?>> recipeKey(Identifier id) {
+        return RegistryKey.of(RegistryKeys.RECIPE, id);
     }
 }

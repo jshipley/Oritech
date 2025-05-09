@@ -1,16 +1,17 @@
 package rearth.oritech.api.recipe;
 
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class GrinderRecipeBuilder extends OritechRecipeBuilder {
 
-    protected GrinderRecipeBuilder() {
-        super(RecipeContent.GRINDER, "grinder");
+    protected GrinderRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.GRINDER, "grinder");
     }
 
-    public static OritechRecipeBuilder build() {
-        return new GrinderRecipeBuilder();
+    public static OritechRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new GrinderRecipeBuilder(registryLookup);
     }
 
     @Override

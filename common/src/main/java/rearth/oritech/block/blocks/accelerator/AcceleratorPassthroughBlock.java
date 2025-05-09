@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
@@ -55,7 +56,7 @@ public class AcceleratorPassthroughBlock extends HorizontalFacingBlock {
     }
     
     @Override
-    public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
+    public void onDestroyedByExplosion(ServerWorld world, BlockPos pos, Explosion explosion) {
         super.onDestroyedByExplosion(world, pos, explosion);
         AcceleratorParticleLogic.resetCachedGate(pos);
     }

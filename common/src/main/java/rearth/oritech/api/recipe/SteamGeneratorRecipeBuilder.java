@@ -1,16 +1,17 @@
 package rearth.oritech.api.recipe;
 
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class SteamGeneratorRecipeBuilder extends OritechRecipeBuilder {
 
-    protected SteamGeneratorRecipeBuilder() {
-        super(RecipeContent.STEAM_ENGINE, "steamgen");
+    protected SteamGeneratorRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.STEAM_ENGINE, "steamgen");
     }
 
-    public static OritechRecipeBuilder build() {
-        return new SteamGeneratorRecipeBuilder();
+    public static OritechRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new SteamGeneratorRecipeBuilder(registryLookup);
     }
 
     @Override

@@ -192,7 +192,7 @@ public abstract class UpgradableGeneratorBlockEntity extends UpgradableMachineBl
         
         var resList = new NbtList();
         for (var stack : pendingOutputs) {
-            var data = stack.encode(registryLookup);
+            var data = stack.toNbt(registryLookup);
             resList.add(data);
         }
         nbt.put("pendingResults", resList);

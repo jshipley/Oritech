@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
@@ -57,7 +58,8 @@ public class BlackHoleBlock extends Block implements BlockEntityProvider {
     protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         // yes this will also kill creative players. This is intentional. Don't annoy me about this by opening a bugfix PR
         // (looking at you jshipley)
-        entity.kill();
+        if (!world.isClient())
+            entity.kill((ServerWorld)world);
     }
     
     @Override

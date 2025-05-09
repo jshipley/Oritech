@@ -1,16 +1,18 @@
 package rearth.oritech.api.recipe;
 
+import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class AssemblerRecipeBuilder extends OritechRecipeBuilder {
 
-    protected AssemblerRecipeBuilder() {
-        super(RecipeContent.ASSEMBLER, "assembler");
+    protected AssemblerRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.ASSEMBLER, "assembler");
     }
 
-    public static OritechRecipeBuilder build() {
-        return new AssemblerRecipeBuilder();
+    public static OritechRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new AssemblerRecipeBuilder(registryLookup);
     }
 
     @Override

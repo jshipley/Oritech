@@ -81,7 +81,7 @@ public abstract class FrameInteractionBlock extends HorizontalFacingBlock implem
                 var handler = (ExtendedMenuProvider) world.getBlockEntity(pos);
                 MenuRegistry.openExtendedMenu((ServerPlayerEntity) player, handler);
             } else {
-                player.sendMessage(Text.translatable("message.oritech.machine_frame.missing_frame"));
+                player.sendMessage(Text.translatable("message.oritech.machine_frame.missing_frame"), false);
             }
             
         }

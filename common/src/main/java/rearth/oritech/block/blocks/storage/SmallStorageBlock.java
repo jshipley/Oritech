@@ -15,8 +15,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.ContextParameters;
+import net.minecraft.util.context.ContextParameterMap;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -120,10 +120,10 @@ public class SmallStorageBlock extends Block implements BlockEntityProvider {
         return ActionResult.SUCCESS;
     }
 
-    protected List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {
+    protected List<ItemStack> getDroppedStacks(BlockState state, ContextParameterMap.Builder builder) {
         var droppedStacks = super.getDroppedStacks(state, builder);
 
-        var blockEntity = builder.getOptional(LootContextParameters.BLOCK_ENTITY);
+        var blockEntity = builder.getOptional(ContextParameters.BLOCK_ENTITY);
         if (blockEntity instanceof SmallStorageBlockEntity storageEntity)
             droppedStacks.addAll(storageEntity.inventory.getHeldStacks());
 

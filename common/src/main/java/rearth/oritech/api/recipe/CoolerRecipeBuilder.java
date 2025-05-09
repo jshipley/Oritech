@@ -1,16 +1,18 @@
 package rearth.oritech.api.recipe;
 
+import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class CoolerRecipeBuilder extends OritechRecipeBuilder {
 
-    protected CoolerRecipeBuilder() {
-        super(RecipeContent.COOLER, "cooler");
+    protected CoolerRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.COOLER, "cooler");
     }
 
-    public static OritechRecipeBuilder build() {
-        return new CoolerRecipeBuilder();
+    public static OritechRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new CoolerRecipeBuilder(registryLookup);
     }
 
     @Override

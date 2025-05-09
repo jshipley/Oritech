@@ -78,12 +78,12 @@ public class DeepDrillBlock extends Block implements BlockEntityProvider {
             }
             
             if (!isAssembled) {
-                player.sendMessage(Text.translatable("message.oritech.machine.missing_core"));
+                player.sendMessage(Text.translatable("message.oritech.machine.missing_core"), false);
                 return ActionResult.SUCCESS;
             }
             
             if (!deepDrill.init(true)) {
-                player.sendMessage(Text.translatable("message.oritech.deep_drill.ore_placement"));
+                player.sendMessage(Text.translatable("message.oritech.deep_drill.ore_placement"), false);
                 return ActionResult.SUCCESS;
             }
             

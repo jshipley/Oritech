@@ -417,7 +417,7 @@ public class PlayerModifierScreen extends BaseOwoHandledScreen<FlowLayout, Playe
             }
         }
         
-        this.handler.player.sendMessage(Text.translatable("text.oritech.loaded_augments", loadedAugmentsCount));
+        this.handler.player.sendMessage(Text.translatable("text.oritech.loaded_augments", loadedAugmentsCount), false);
         this.close();
         
     }

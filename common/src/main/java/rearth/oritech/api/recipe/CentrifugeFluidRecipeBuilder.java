@@ -1,16 +1,18 @@
 package rearth.oritech.api.recipe;
 
+import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class CentrifugeFluidRecipeBuilder extends OritechRecipeBuilder {
 
-    protected CentrifugeFluidRecipeBuilder() {
-        super(RecipeContent.CENTRIFUGE_FLUID, "centrifuge/fluid");
+    protected CentrifugeFluidRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.CENTRIFUGE_FLUID, "centrifuge/fluid");
     }
 
-    public static OritechRecipeBuilder build() {
-        return new CentrifugeFluidRecipeBuilder();
+    public static OritechRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new CentrifugeFluidRecipeBuilder(registryLookup);
     }
 
     @Override

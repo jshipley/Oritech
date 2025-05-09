@@ -9,6 +9,7 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import rearth.oritech.api.energy.EnergyApi;
 import rearth.oritech.block.blocks.interaction.LaserArmBlock;
@@ -23,7 +24,7 @@ public class LaserArmEntityBehavior {
     // and the laser could respect the attackable TargetPredicate to avoid attacking "friendly" mobs or to attack players
     // instead of trying to charge their energy storage chestplates
     
-    public boolean fireAtEntity(World world, LaserArmBlockEntity laserEntity, LivingEntity entity) {
+    public boolean fireAtEntity(ServerWorld world, LaserArmBlockEntity laserEntity, LivingEntity entity) {
         // Don't kill baby animals if the crop filter addon is applied
         if (laserEntity.hasCropFilterAddon && entity instanceof AnimalEntity && entity.isBaby()) {
             return false;
@@ -32,7 +33,7 @@ public class LaserArmEntityBehavior {
         if (world.getTime() % 10 != 0) return true; // entities can only be damaged twice per second?
         
         entity.damage(
-          new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(DamageTypes.LIGHTNING_BOLT), laserEntity.getLaserPlayerEntity()),
+          new DamageSource(world.getRegistryManager().getOptional(RegistryKeys.DAMAGE_TYPE).get().entryOf(DamageTypes.LIGHTNING_BOLT), laserEntity.getLaserPlayerEntity()),
           laserEntity.getDamageTick());
         
         return true;
@@ -41,7 +42,7 @@ public class LaserArmEntityBehavior {
     public static void registerDefaults() {
         transferPowerBehavior = new LaserArmEntityBehavior() {
             @Override
-            public boolean fireAtEntity(World world, LaserArmBlockEntity laserEntity, LivingEntity entity) {
+            public boolean fireAtEntity(ServerWorld world, LaserArmBlockEntity laserEntity, LivingEntity entity) {
                 if (!(entity instanceof PlayerEntity player))
                     return false;
                 
@@ -59,7 +60,7 @@ public class LaserArmEntityBehavior {
         
         chargeEntityBehavior = new LaserArmEntityBehavior() {
             @Override
-            public boolean fireAtEntity(World world, LaserArmBlockEntity laserEntity, LivingEntity entity) {
+            public boolean fireAtEntity(ServerWorld world, LaserArmBlockEntity laserEntity, LivingEntity entity) {
                 entity.getDataTracker().set(CreeperEntity.CHARGED, true);
                 
                 // still do the default mob behavior after setting the creeper to charged

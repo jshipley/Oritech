@@ -1,5 +1,6 @@
 package rearth.oritech.init.recipes;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
@@ -9,7 +10,7 @@ import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import rearth.oritech.init.TagContent;
+import rearth.oritech.init.ItemContent;
 import rearth.oritech.util.SizedIngredient;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public class AugmentRecipe implements Recipe<RecipeInput> {
     private final int time;
     private final long rfCost;
 
-    public static final AugmentRecipe DUMMY = new AugmentRecipe(RecipeContent.AUGMENT, List.of(new SizedIngredient(1, Ingredient.fromTag(TagContent.NICKEL_DUSTS))), List.of(new SizedIngredient(1, Ingredient.fromTag(TagContent.NICKEL_DUSTS))), List.of(), Identifier.of(""), -1, -1, -1, -1);
+    public static final AugmentRecipe DUMMY = new AugmentRecipe(null, RecipeContent.AUGMENT, List.of(new SizedIngredient(1, Ingredient.ofItems(ItemContent.NICKEL_DUST))), List.of(new SizedIngredient(1, Ingredient.ofItems(ItemContent.NICKEL_DUST))), List.of(), Identifier.of(""), -1, -1, -1, -1);
     
-    public AugmentRecipe(AugmentRecipeType type, List<SizedIngredient> inputs, List<SizedIngredient> applyCost, List<Identifier> requirements, Identifier requiredStation, int uiX, int uiY, int time, long rfCost) {
+    public AugmentRecipe(RegistryWrapper.WrapperLookup registryLookup, AugmentRecipeType type, List<SizedIngredient> inputs, List<SizedIngredient> applyCost, List<Identifier> requirements, Identifier requiredStation, int uiX, int uiY, int time, long rfCost) {
         this.type = type;
         this.researchCost = inputs;
         this.applyCost = applyCost;
@@ -61,12 +62,12 @@ public class AugmentRecipe implements Recipe<RecipeInput> {
     }
     
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return type;
     }
     
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<RecipeInput>> getType() {
         return type;
     }
     

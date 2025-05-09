@@ -2,7 +2,6 @@ package rearth.oritech.init;
 
 import dev.architectury.fluid.FluidStack;
 import dev.architectury.registry.registries.RegistrySupplier;
-import io.wispforest.owo.registration.reflect.BlockRegistryContainer.NoBlockItem;
 import net.minecraft.block.*;
 import net.minecraft.block.dispenser.BlockPlacementDispenserBehavior;
 import net.minecraft.block.piston.PistonBehavior;
@@ -45,6 +44,7 @@ import rearth.oritech.item.OritechGeoItem;
 import rearth.oritech.item.other.SmallEnergyStorageBlockItem;
 import rearth.oritech.item.other.SmallFluidTankBlockItem;
 import rearth.oritech.util.registry.ArchitecturyBlockRegistryContainer;
+import rearth.oritech.util.registry.ArchitecturyBlockRegistryContainer.NoBlockItem;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

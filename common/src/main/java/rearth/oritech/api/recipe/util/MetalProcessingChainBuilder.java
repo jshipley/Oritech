@@ -1,12 +1,13 @@
 package rearth.oritech.api.recipe.util;
 
-import net.minecraft.data.server.recipe.RecipeExporter;
-import net.minecraft.data.server.recipe.RecipeProvider;
+import net.minecraft.data.recipe.RecipeExporter;
+import net.minecraft.data.recipe.RecipeGenerator;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import rearth.oritech.Oritech;
 import rearth.oritech.api.recipe.AtomicForgeRecipeBuilder;
@@ -22,6 +23,8 @@ import java.util.List;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
+
+import static rearth.oritech.api.recipe.util.RecipeHelpers.of;
 
 public class MetalProcessingChainBuilder {
     private String metalName;
@@ -54,13 +57,15 @@ public class MetalProcessingChainBuilder {
     private float timeMultiplier = 1f;
     // for compat use. no need to add vanilla processing for other mods' ores
     private boolean vanillaProcessing = false;
+    private final RegistryWrapper.WrapperLookup registryLookup;
 
-    private MetalProcessingChainBuilder(String metalName) {
+    private MetalProcessingChainBuilder(RegistryWrapper.WrapperLookup registryLookup, String metalName) {
+        this.registryLookup = registryLookup;
         this.metalName = metalName;
     }
 
-    public static MetalProcessingChainBuilder build(String metalName) {
-        return new MetalProcessingChainBuilder(metalName);
+    public static MetalProcessingChainBuilder build(RegistryWrapper.WrapperLookup registryLookup, String metalName) {
+        return new MetalProcessingChainBuilder(registryLookup, metalName);
     }
 
     public MetalProcessingChainBuilder resourcePath(String resourcePath) {
@@ -74,11 +79,11 @@ public class MetalProcessingChainBuilder {
     }
 
     public MetalProcessingChainBuilder ore(TagKey<Item> oreTag) {
-        return ore(Ingredient.fromTag(oreTag));
+        return ore(of(registryLookup, oreTag));
     }
 
     public MetalProcessingChainBuilder ore(ItemConvertible ore) {
-        return ore(Ingredient.ofItems(ore));
+        return ore(of(ore));
     }
 
     public MetalProcessingChainBuilder rawOre(Ingredient rawOreIngredient, Item rawOre) {
@@ -88,11 +93,11 @@ public class MetalProcessingChainBuilder {
     }
 
     public MetalProcessingChainBuilder rawOre(TagKey<Item> rawOreTag, Item rawOre) {
-        return rawOre(Ingredient.fromTag(rawOreTag), rawOre);
+        return rawOre(of(registryLookup, rawOreTag), rawOre);
     }
 
     public MetalProcessingChainBuilder rawOre(Item rawOre) {
-        return rawOre(Ingredient.ofItems(rawOre), rawOre);
+        return rawOre(of(rawOre), rawOre);
     }
 
     public MetalProcessingChainBuilder rawOreByproduct(Item byproduct) {
@@ -107,11 +112,11 @@ public class MetalProcessingChainBuilder {
     }
 
     public MetalProcessingChainBuilder ingot(TagKey<Item> ingotTag, Item ingot) {
-        return ingot(Ingredient.fromTag(ingotTag), ingot);
+        return ingot(of(registryLookup, ingotTag), ingot);
     }
 
     public MetalProcessingChainBuilder ingot(Item ingot) {
-        return ingot(Ingredient.ofItems(ingot), ingot);
+        return ingot(of(ingot), ingot);
     }
 
     public MetalProcessingChainBuilder nugget(Ingredient nuggetIngredient, Item nugget) {
@@ -121,11 +126,11 @@ public class MetalProcessingChainBuilder {
     }
 
     public MetalProcessingChainBuilder nugget(TagKey<Item> nuggetTag, Item nugget) {
-        return nugget(Ingredient.fromTag(nuggetTag), nugget);
+        return nugget(of(registryLookup, nuggetTag), nugget);
     }
 
     public MetalProcessingChainBuilder nugget(Item nugget) {
-        return nugget(Ingredient.ofItems(nugget), nugget);
+        return nugget(of(nugget), nugget);
     }
 
     public MetalProcessingChainBuilder clump(Ingredient clumpIngredient, Item clump) {
@@ -135,11 +140,11 @@ public class MetalProcessingChainBuilder {
     }
 
     public MetalProcessingChainBuilder clump(TagKey<Item> clumpTag, Item clump) {
-        return clump(Ingredient.fromTag(clumpTag), clump);
+        return clump(of(registryLookup, clumpTag), clump);
     }
 
     public MetalProcessingChainBuilder clump(Item clump) {
-        return clump(Ingredient.ofItems(clump), clump);
+        return clump(of(clump), clump);
     }
 
     public MetalProcessingChainBuilder smallClump(Item smallClump) {
@@ -189,11 +194,11 @@ public class MetalProcessingChainBuilder {
     }
 
     public MetalProcessingChainBuilder gem(TagKey<Item> gemTag, Item gem) {
-        return gem(Ingredient.fromTag(gemTag), gem);
+        return gem(of(registryLookup, gemTag), gem);
     }
 
     public MetalProcessingChainBuilder gem(Item gem) {
-        return gem(Ingredient.ofItems(gem), gem);
+        return gem(of(gem), gem);
     }
 
     public MetalProcessingChainBuilder gemCatalyst(Ingredient gemCatalyst) {
@@ -202,11 +207,11 @@ public class MetalProcessingChainBuilder {
     }
 
     public MetalProcessingChainBuilder gemCatalyst(TagKey<Item> gemCatalyst) {
-        return gemCatalyst(Ingredient.fromTag(gemCatalyst));
+        return gemCatalyst(of(registryLookup, gemCatalyst));
     }
 
     public MetalProcessingChainBuilder gemCatalyst(Item gemCatalyst) {
-        return gemCatalyst(Ingredient.ofItems(gemCatalyst));
+        return gemCatalyst(of(gemCatalyst));
     }
 
     public MetalProcessingChainBuilder timeMultiplier(float timeMultiplier) {
@@ -238,15 +243,15 @@ public class MetalProcessingChainBuilder {
         validate(resourcePath + "ore/" + metalName);
 
         // ore block -> raw ores
-        PulverizerRecipeBuilder.build().input(ore).result(rawOreItem, 2).timeMultiplier(timeMultiplier).export(exporter, resourcePath + "ore/" + metalName);
-        var grinderOreRecipe = GrinderRecipeBuilder.build().input(ore).result(rawOreItem, 2).time(140).timeMultiplier(timeMultiplier);
+        PulverizerRecipeBuilder.build(registryLookup).input(ore).result(rawOreItem, 2).timeMultiplier(timeMultiplier).export(exporter, resourcePath + "ore/" + metalName);
+        var grinderOreRecipe = GrinderRecipeBuilder.build(registryLookup).input(ore).result(rawOreItem, 2).time(140).timeMultiplier(timeMultiplier);
         if (rawOreByproduct != null)
             grinderOreRecipe.result(rawOreByproduct);
         grinderOreRecipe.export(exporter, resourcePath + "ore/" + metalName);
 
         // raw ores -> dusts in pulverizer
         if (dustItem != null) {
-            PulverizerRecipeBuilder.build()
+            PulverizerRecipeBuilder.build(registryLookup)
                 .input(rawOreIngredient)
                 .result(dustItem)
                 .result(firstNonNullOptional(smallDustItem, nuggetItem), 3)
@@ -256,7 +261,7 @@ public class MetalProcessingChainBuilder {
 
         // raw ores -> clumps (falling back to dusts) in grinder
         if (clumpItem != null || dustItem != null) {
-            GrinderRecipeBuilder.build()
+            GrinderRecipeBuilder.build(registryLookup)
                 .input(rawOreIngredient)
                 .result(firstNonNull(clumpItem, dustItem))
                 .result(firstNonNullOptional(smallClumpItem, smallDustItem, nuggetItem), 3)
@@ -267,13 +272,13 @@ public class MetalProcessingChainBuilder {
 
         // clump processing into gems in centrifuge
         if (clumpItem != null) {
-            CentrifugeRecipeBuilder.build()
+            CentrifugeRecipeBuilder.build(registryLookup)
                 .input(clumpIngredient)
                 .result(firstNonNull(centrifugeResult, gemItem))
                 .result(Optional.fromNullable(dustByproduct), byproductAmount)
                 .timeMultiplier(timeMultiplier)
                 .export(exporter, resourcePath + "clump/" + metalName);
-            CentrifugeFluidRecipeBuilder.build()
+            CentrifugeFluidRecipeBuilder.build(registryLookup)
                 .input(clumpIngredient)
                 .fluidInput(Fluids.WATER)
                 .result(firstNonNull(centrifugeResult, gemItem), 2)
@@ -284,10 +289,10 @@ public class MetalProcessingChainBuilder {
         // gems to dust (doubling)
         if (gemIngredient != null) {
             // atomic forge: 1 gem -> 2 ingots
-            AtomicForgeRecipeBuilder.build().input(gemIngredient).input(gemCatalyst).input(gemCatalyst).result(dustItem, 2).time(20).export(exporter, resourcePath + "dust/" + metalName);
+            AtomicForgeRecipeBuilder.build(registryLookup).input(gemIngredient).input(gemCatalyst).input(gemCatalyst).result(dustItem, 2).time(20).export(exporter, resourcePath + "dust/" + metalName);
 
             // foundry alternative: 2 gems -> 3 ingots
-            FoundryRecipeBuilder.build().input(gemIngredient).input(gemIngredient).result(ingotItem, 3).export(exporter, resourcePath + "gem/" + metalName);
+            FoundryRecipeBuilder.build(registryLookup).input(gemIngredient).input(gemIngredient).result(ingotItem, 3).export(exporter, resourcePath + "gem/" + metalName);
         }
 
         // ingots/nuggets to dust
@@ -301,22 +306,22 @@ public class MetalProcessingChainBuilder {
         // This should be fine, because any mod that adds ores, dusts, etc. will provide their own smelting/blasting recipes
         if (vanillaProcessing) {
             if (dustItem != null) {
-                RecipeProvider.offerSmelting(exporter, List.of(dustItem), RecipeCategory.MISC, ingotItem, 1f, 200, Oritech.MOD_ID);
-                RecipeProvider.offerBlasting(exporter, List.of(dustItem), RecipeCategory.MISC, ingotItem, 1f, 100, Oritech.MOD_ID);
-                RecipeProvider.offerCompactingRecipe(exporter, RecipeCategory.MISC, dustItem, smallDustItem);
+                RecipeGenerator.offerSmelting(List.of(dustItem), RecipeCategory.MISC, ingotItem, 1f, 200, Oritech.MOD_ID);
+                RecipeGenerator.offerBlasting(List.of(dustItem), RecipeCategory.MISC, ingotItem, 1f, 100, Oritech.MOD_ID);
+                RecipeGenerator.offerCompactingRecipe(RecipeCategory.MISC, dustItem, smallDustItem);
             }
             if (smallDustItem != null) {
-                RecipeProvider.offerSmelting(exporter, List.of(smallDustItem), RecipeCategory.MISC, nuggetItem, 0.5f, 50, Oritech.MOD_ID);
-                RecipeProvider.offerBlasting(exporter, List.of(smallDustItem), RecipeCategory.MISC, nuggetItem, 0.5f, 25, Oritech.MOD_ID);
+                RecipeGenerator.offerSmelting(List.of(smallDustItem), RecipeCategory.MISC, nuggetItem, 0.5f, 50, Oritech.MOD_ID);
+                RecipeGenerator.offerBlasting(List.of(smallDustItem), RecipeCategory.MISC, nuggetItem, 0.5f, 25, Oritech.MOD_ID);
             }
             if (gemItem != null) {
-                RecipeProvider.offerSmelting(exporter, List.of(gemItem), RecipeCategory.MISC, ingotItem, 1f, 200, Oritech.MOD_ID);
-                RecipeProvider.offerBlasting(exporter, List.of(gemItem), RecipeCategory.MISC, ingotItem, 1f, 100, Oritech.MOD_ID);
+                RecipeGenerator.offerSmelting(List.of(gemItem), RecipeCategory.MISC, ingotItem, 1f, 200, Oritech.MOD_ID);
+                RecipeGenerator.offerBlasting(List.of(gemItem), RecipeCategory.MISC, ingotItem, 1f, 100, Oritech.MOD_ID);
             }
             if (clumpItem != null && smallClumpItem != null)
-                RecipeProvider.offerCompactingRecipe(exporter, RecipeCategory.MISC, clumpItem, smallClumpItem);
+                RecipeGenerator.offerCompactingRecipe(RecipeCategory.MISC, clumpItem, smallClumpItem);
             if (nuggetItem != null)
-                RecipeProvider.offerCompactingRecipe(exporter, RecipeCategory.MISC, ingotItem, nuggetItem);
+                RecipeGenerator.offerCompactingRecipe(RecipeCategory.MISC, ingotItem, nuggetItem);
         }
     }
 

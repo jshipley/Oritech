@@ -29,7 +29,7 @@ public class OritechRecipe implements Recipe<RecipeInput> {
     protected final FluidStack fluidOutput;
     protected final int time;
 
-    public static final OritechRecipe DUMMY = new OritechRecipe(-1, DefaultedList.ofSize(1, Ingredient.ofStacks(Items.IRON_INGOT.getDefaultStack())), DefaultedList.ofSize(1, Items.IRON_BLOCK.getDefaultStack()), RecipeContent.PULVERIZER, FluidStack.empty(), FluidStack.empty());
+    public static final OritechRecipe DUMMY = new OritechRecipe(-1, DefaultedList.ofSize(1, Ingredient.ofItems(Items.IRON_INGOT)), DefaultedList.ofSize(1, Items.IRON_BLOCK.getDefaultStack()), RecipeContent.PULVERIZER, FluidStack.empty(), FluidStack.empty());
     
     public OritechRecipe(int time, List<Ingredient> inputs, List<ItemStack> results, OritechRecipeType type, @Nullable FluidStack fluidInput, @Nullable FluidStack fluidOutput) {
         this.type = type;
@@ -55,7 +55,7 @@ public class OritechRecipe implements Recipe<RecipeInput> {
             return complexMatch(input);
         }
         
-        if (input.getSize() < inputs.size()) return false;
+        if (input.size() < inputs.size()) return false;
         
         var ingredients = getInputs();
         for (int i = 0; i < ingredients.size(); i++) {
@@ -110,7 +110,7 @@ public class OritechRecipe implements Recipe<RecipeInput> {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return type;
     }
     
@@ -120,7 +120,7 @@ public class OritechRecipe implements Recipe<RecipeInput> {
     }
     
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<RecipeInput>> getType() {
         return type;
     }
     

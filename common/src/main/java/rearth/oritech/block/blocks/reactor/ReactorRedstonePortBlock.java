@@ -48,7 +48,7 @@ public class ReactorRedstonePortBlock extends BaseReactorBlock {
         var lastMode = state.get(PORT_MODE);
         var cycledMode = (lastMode + 1) % 3;
         
-        player.sendMessage(Text.translatable("tooltip.oritech.reactor_port_mode." + cycledMode));
+        player.sendMessage(Text.translatable("tooltip.oritech.reactor_port_mode." + cycledMode), false);
         
         var newState = state.with(PORT_MODE, cycledMode);
         world.setBlockState(pos, newState);

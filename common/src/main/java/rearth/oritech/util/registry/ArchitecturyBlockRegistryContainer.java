@@ -2,7 +2,6 @@ package rearth.oritech.util.registry;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import io.wispforest.owo.registration.reflect.BlockRegistryContainer;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -11,6 +10,10 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import rearth.oritech.Oritech;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 public interface ArchitecturyBlockRegistryContainer extends ArchitecturyRegistryContainer<Block> {
@@ -29,7 +32,7 @@ public interface ArchitecturyBlockRegistryContainer extends ArchitecturyRegistry
     
     @Override
     default void postProcessField(String namespace, Block value, String identifier, Field field, RegistrySupplier<Block> supplier) {
-        if (field.isAnnotationPresent(BlockRegistryContainer.NoBlockItem.class)) return;
+        if (field.isAnnotationPresent(NoBlockItem.class)) return;
         ITEM_REGISTRY.register(identifier, () -> createBlockItem(value, identifier));
     }
     
@@ -40,5 +43,8 @@ public interface ArchitecturyBlockRegistryContainer extends ArchitecturyRegistry
     static void finishItemRegister() {
         ITEM_REGISTRY.register();
     }
-    
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    @interface NoBlockItem {}
 }

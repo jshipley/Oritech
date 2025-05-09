@@ -226,7 +226,7 @@ public class SpawnerControllerBlockEntity extends BaseSoulCollectionEntity imple
     public void onBlockInteracted(PlayerEntity player) {
         
         if (spawnedMob == null) {
-            player.sendMessage(Text.translatable("message.oritech.spawner.no_mob"));
+            player.sendMessage(Text.translatable("message.oritech.spawner.no_mob"), false);
             return;
         }
         
@@ -235,7 +235,7 @@ public class SpawnerControllerBlockEntity extends BaseSoulCollectionEntity imple
         reloadCage(player);
         
         if (hasCage)
-            player.sendMessage(Text.translatable("tooltip.oritech.spawner.collected_souls", collectedSouls, maxSouls));
+            player.sendMessage(Text.translatable("tooltip.oritech.spawner.collected_souls", collectedSouls, maxSouls), false);
     }
     
     private void reloadCage(@Nullable PlayerEntity player) {
@@ -260,7 +260,7 @@ public class SpawnerControllerBlockEntity extends BaseSoulCollectionEntity imple
         }
         
         if (!hasCage && player != null) {
-            player.sendMessage(Text.translatable("message.oritech.spawner.no_cage"));
+            player.sendMessage(Text.translatable("message.oritech.spawner.no_cage"), false);
         }
         
         this.markDirty();

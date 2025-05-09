@@ -12,8 +12,8 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.ContextParameters;
+import net.minecraft.util.context.ContextParameterMap;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -122,10 +122,10 @@ public class SmallFluidTank extends Block implements BlockEntityProvider {
         return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
     }
     
-    protected List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {
+    protected List<ItemStack> getDroppedStacks(BlockState state, ContextParameterMap.Builder builder) {
         var droppedStacks = super.getDroppedStacks(state, builder);
         
-        var blockEntity = builder.getOptional(LootContextParameters.BLOCK_ENTITY);
+        var blockEntity = builder.getOptional(ContextParameters.BLOCK_ENTITY);
         if (blockEntity instanceof SmallTankEntity tankEntity)
             droppedStacks.addAll(tankEntity.inventory.getHeldStacks());
         

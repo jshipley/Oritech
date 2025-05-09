@@ -193,7 +193,7 @@ public class AugmentApplicationBlock extends HorizontalFacingBlock implements Bl
         }
         
         if (!isAssembled) {
-            player.sendMessage(Text.translatable("message.oritech.machine.missing_core"));
+            player.sendMessage(Text.translatable("message.oritech.machine.missing_core"), false);
             return ActionResult.SUCCESS;
         }
         

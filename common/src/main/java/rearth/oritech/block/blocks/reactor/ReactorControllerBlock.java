@@ -70,7 +70,7 @@ public class ReactorControllerBlock extends BaseReactorBlock implements BlockEnt
             reactorController.init(player);
             
             if (world.getTime() < reactorController.disabledUntil) {
-                player.sendMessage(Text.translatable("text.oritech.reactor.cooldown"));
+                player.sendMessage(Text.translatable("text.oritech.reactor.cooldown"), false);
                 return ActionResult.SUCCESS;
             }
             

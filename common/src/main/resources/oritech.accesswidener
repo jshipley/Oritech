@@ -9,8 +9,4 @@ accessible method net/minecraft/block/BuddingAmethystBlock randomTick (Lnet/mine
 accessible field net/minecraft/entity/mob/CreeperEntity CHARGED Lnet/minecraft/entity/data/TrackedData;
 accessible method net/minecraft/block/ComposterBlock registerCompostableItem (FLnet/minecraft/item/ItemConvertible;)V
 accessible field net/minecraft/client/network/ClientPlayerEntity client Lnet/minecraft/client/MinecraftClient;
-accessible field net/minecraft/item/Item components Lnet/minecraft/component/ComponentMap;
-mutable field net/minecraft/item/Item components Lnet/minecraft/component/ComponentMap;
-accessible method net/minecraft/item/Item$Settings getValidatedComponents ()Lnet/minecraft/component/ComponentMap;
 accessible field net/minecraft/server/network/ServerPlayNetworkHandler floatingTicks I
-accessible method net/minecraft/client/render/WorldRenderer drawCuboidShapeOutline (Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/util/shape/VoxelShape;DDDFFFF)V

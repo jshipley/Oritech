@@ -1,15 +1,16 @@
 package rearth.oritech.api.recipe;
 
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class FuelGeneratorRecipeBuilder extends OritechRecipeBuilder {
-    private FuelGeneratorRecipeBuilder() {
-        super(RecipeContent.FUEL_GENERATOR, "fuelgen");
+    private FuelGeneratorRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.FUEL_GENERATOR, "fuelgen");
     }
 
-    public static OritechRecipeBuilder build() {
-        return new FuelGeneratorRecipeBuilder();
+    public static OritechRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new FuelGeneratorRecipeBuilder(registryLookup);
     }
 
     @Override

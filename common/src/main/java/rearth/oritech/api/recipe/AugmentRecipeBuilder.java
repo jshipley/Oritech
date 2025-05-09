@@ -3,10 +3,11 @@ package rearth.oritech.api.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import rearth.oritech.Oritech;
@@ -14,6 +15,8 @@ import rearth.oritech.init.recipes.AugmentRecipe;
 import rearth.oritech.init.recipes.AugmentRecipeType;
 import rearth.oritech.init.recipes.RecipeContent;
 import rearth.oritech.util.SizedIngredient;
+
+import static rearth.oritech.api.recipe.util.RecipeHelpers.*;
 
 public class AugmentRecipeBuilder {
     private AugmentRecipeType type;
@@ -26,14 +29,16 @@ public class AugmentRecipeBuilder {
     private int time;
     private long rfCost;
     private String resourcePath;
+    private final RegistryWrapper.WrapperLookup registryLookup;
 
-    private AugmentRecipeBuilder(AugmentRecipeType type, String resourcePath) {
+    private AugmentRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup, AugmentRecipeType type, String resourcePath) {
         this.type = type;
         this.resourcePath = resourcePath;
+        this.registryLookup = registryLookup;
     }
 
-    public static AugmentRecipeBuilder build () {
-        return new AugmentRecipeBuilder(RecipeContent.AUGMENT, "augment");
+    public static AugmentRecipeBuilder build (RegistryWrapper.WrapperLookup registryLookup) {
+        return new AugmentRecipeBuilder(registryLookup, RecipeContent.AUGMENT, "augment");
     }
 
     public AugmentRecipeBuilder researchCost(List<SizedIngredient> researchCosts) {
@@ -59,7 +64,7 @@ public class AugmentRecipeBuilder {
     }
 
     public AugmentRecipeBuilder researchCost(TagKey<Item> researchCostTag, int count) {
-        return researchCost(Ingredient.fromTag(researchCostTag), count);
+        return researchCost(of(registryLookup, researchCostTag), count);
     }
 
     public AugmentRecipeBuilder researchCost(TagKey<Item> researchCostTag) {
@@ -67,7 +72,7 @@ public class AugmentRecipeBuilder {
     }
 
     public AugmentRecipeBuilder researchCost(ItemConvertible researchCost, int count) {
-        return researchCost(Ingredient.ofItems(researchCost), count);
+        return researchCost(of(researchCost), count);
     }
 
     public AugmentRecipeBuilder researchCost(ItemConvertible researchCost) {
@@ -97,7 +102,7 @@ public class AugmentRecipeBuilder {
     }
 
     public AugmentRecipeBuilder applyCost(TagKey<Item> applyCostTag, int count) {
-        return applyCost(Ingredient.fromTag(applyCostTag), count);
+        return applyCost(of(registryLookup, applyCostTag), count);
     }
 
     public AugmentRecipeBuilder applyCost(TagKey<Item> applyCostTag) {
@@ -105,7 +110,7 @@ public class AugmentRecipeBuilder {
     }
 
     public AugmentRecipeBuilder applyCost(ItemConvertible applyCost, int count) {
-        return applyCost(Ingredient.ofItems(applyCost), count);
+        return applyCost(of(applyCost), count);
     }
 
     public AugmentRecipeBuilder applyCost(ItemConvertible applyCost) {
@@ -164,6 +169,6 @@ public class AugmentRecipeBuilder {
         var id = Oritech.id(resourcePath + "/" + suffix);
         validate(id);
 
-        exporter.accept(id, new AugmentRecipe(type, researchCosts, applyCosts, requirements != null ? requirements : List.of(), requiredStation, uiX, uiY, time, rfCost), null);
+        exporter.accept(recipeKey(id), new AugmentRecipe(registryLookup, type, researchCosts, applyCosts, requirements != null ? requirements : List.of(), requiredStation, uiX, uiY, time, rfCost), null);
     }
 }

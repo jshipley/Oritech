@@ -1,17 +1,18 @@
 package rearth.oritech.api.recipe;
 
-import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.recipe.RecipeExporter;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import rearth.oritech.init.recipes.RecipeContent;
 
 public class PulverizerRecipeBuilder extends OritechRecipeBuilder {
 
-    protected PulverizerRecipeBuilder() {
-        super(RecipeContent.PULVERIZER, "pulverizer");
+    protected PulverizerRecipeBuilder(RegistryWrapper.WrapperLookup registryLookup) {
+        super(registryLookup, RecipeContent.PULVERIZER, "pulverizer");
     }
 
-    public static PulverizerRecipeBuilder build() {
-        return new PulverizerRecipeBuilder();
+    public static PulverizerRecipeBuilder build(RegistryWrapper.WrapperLookup registryLookup) {
+        return new PulverizerRecipeBuilder(registryLookup);
     }
 
     @Override
@@ -25,6 +26,6 @@ public class PulverizerRecipeBuilder extends OritechRecipeBuilder {
         super.export(exporter, suffix);
 
         if (addToGrinder)
-            GrinderRecipeBuilder.build().input(inputs).result(results).export(exporter, suffix);
+            GrinderRecipeBuilder.build(registryLookup).input(inputs).result(results).export(exporter, suffix);
     }
 }

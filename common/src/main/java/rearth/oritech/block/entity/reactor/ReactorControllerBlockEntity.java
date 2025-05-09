@@ -327,7 +327,7 @@ public class ReactorControllerBlockEntity extends BlockEntity implements BlockEn
         
         if (cornerA == pos || cornerB == pos || cornerA == cornerB || onSameAxis(cornerA, cornerB)) {
             if (player != null)
-                player.sendMessage(Text.translatable("message.oritech.reactor_edge_invalid"));
+                player.sendMessage(Text.translatable("message.oritech.reactor_edge_invalid"), false);
             return;
         }
         
@@ -365,7 +365,7 @@ public class ReactorControllerBlockEntity extends BlockEntity implements BlockEn
         
         if (!wallsValid) {
             if (player != null)
-                player.sendMessage(Text.translatable("message.oritech.reactor_wall_invalid"));
+                player.sendMessage(Text.translatable("message.oritech.reactor_wall_invalid"), false);
             return;
         }
         
@@ -415,7 +415,7 @@ public class ReactorControllerBlockEntity extends BlockEntity implements BlockEn
         
         if (!interiorStackedRight) {
             if (player != null)
-                player.sendMessage(Text.translatable("message.oritech.reactor_interior_issues"));
+                player.sendMessage(Text.translatable("message.oritech.reactor_interior_issues"), false);
             return;
         }
         

@@ -131,7 +131,7 @@ public class LaserArmBlockEntity extends BlockEntity implements
         
         if (!redstonePowered && energyStorage.getAmount() >= energyRequiredToFire()) {
             if (hunterAddons > 0) {
-                fireAtLivingEntities(world, pos, state, blockEntity);
+                fireAtLivingEntities((ServerWorld)world, pos, state, blockEntity);
             } else if (currentTarget != null && !currentTarget.equals(BlockPos.ZERO)) {
                 fireAtBlocks(world, pos, state, blockEntity);
             } else if (targetDirection != null && !targetDirection.equals(BlockPos.ORIGIN) && (world.getTime() + pos.getZ()) % 40 == 0) {
@@ -161,7 +161,7 @@ public class LaserArmBlockEntity extends BlockEntity implements
         }
     }
     
-    private void fireAtLivingEntities(World world, BlockPos pos, BlockState state, LaserArmBlockEntity blockEntity) {
+    private void fireAtLivingEntities(ServerWorld world, BlockPos pos, BlockState state, LaserArmBlockEntity blockEntity) {
         // check that there is a target, that is still alive and still in range
         if (currentLivingTarget != null && validTarget(currentLivingTarget)) {
             
@@ -257,7 +257,7 @@ public class LaserArmBlockEntity extends BlockEntity implements
         if (hunterAddons > 0 && yieldAddons > 0) {
             var lootingSword = new ItemStack(Items.NETHERITE_SWORD);
             lootingSword.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(false));
-            var lootingEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.LOOTING).get();
+            var lootingEntry = world.getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT).get().getEntry(Enchantments.LOOTING).get();
             lootingSword.addEnchantment(lootingEntry, Math.min(yieldAddons, 3));
             laserPlayerEntity.getInventory().main.set(laserPlayerEntity.getInventory().selectedSlot, lootingSword);
         }

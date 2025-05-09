@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.text.Text;
@@ -61,7 +62,7 @@ public abstract class MultiblockMachine extends UpgradableMachineBlock {
             }
             
             if (!isAssembled) {
-                player.sendMessage(Text.translatable("message.oritech.machine.missing_core"));
+                player.sendMessage(Text.translatable("message.oritech.machine.missing_core"), false);
                 return ActionResult.SUCCESS;
             }
             
@@ -85,7 +86,7 @@ public abstract class MultiblockMachine extends UpgradableMachineBlock {
     }
     
     @Override
-    protected void onExploded(BlockState state, World world, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> stackMerger) {
+    protected void onExploded(BlockState state, ServerWorld world, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> stackMerger) {
         
         if (!world.isClient() && state.get(ASSEMBLED)) {
             

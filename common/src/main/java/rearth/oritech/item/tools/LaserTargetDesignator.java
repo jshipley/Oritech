@@ -44,14 +44,14 @@ public class LaserTargetDesignator extends Item {
             
             if (laserEntity.hunterAddons > 0) {
                 laserEntity.cycleHunterTargetMode();
-                context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.hunter_target", Text.translatable(laserEntity.hunterTargetMode.message)));
+                context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.hunter_target", Text.translatable(laserEntity.hunterTargetMode.message)), false);
                 return ActionResult.SUCCESS;
             } else if (context.getStack().contains(ComponentContent.TARGET_POSITION.get())) {
                 var target = context.getStack().get(ComponentContent.TARGET_POSITION.get());
 
                 var success = laserEntity.setTargetFromDesignator(target);
                 if (success)
-                    context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_saved"));
+                    context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_saved"), false);
                 return success ? ActionResult.SUCCESS : ActionResult.FAIL;
             }
         }
@@ -63,9 +63,9 @@ public class LaserTargetDesignator extends Item {
             
             var success = dronePortEntity.setTargetFromDesignator(target);
             if (success) {
-                context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_saved"));
+                context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_saved"), false);
             } else {
-                context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_invalid"));
+                context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_invalid"), false);
             }
             return success ? ActionResult.SUCCESS : ActionResult.FAIL;
         }
@@ -74,7 +74,7 @@ public class LaserTargetDesignator extends Item {
             Oritech.LOGGER.debug(targetBlockState.toString());
             
             context.getStack().set(ComponentContent.TARGET_POSITION.get(), context.getBlockPos());
-            context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_stored"));
+            context.getPlayer().sendMessage(Text.translatable("message.oritech.target_designator.position_stored"), false);
             
             return ActionResult.SUCCESS;
         }

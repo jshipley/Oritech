@@ -119,7 +119,7 @@ public class LaserArmBlock extends Block implements BlockEntityProvider {
             }
             
             if (!isAssembled) {
-                player.sendMessage(Text.translatable("message.oritech.machine.missing_core"));
+                player.sendMessage(Text.translatable("message.oritech.machine.missing_core"), false);
                 return ActionResult.SUCCESS;
             }
             

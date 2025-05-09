@@ -107,7 +107,7 @@ public class MachineCoreBlock extends Block implements BlockEntityProvider {
             var controllerBlock = world.getBlockState(controllerPos);
             var controllerEntity = world.getBlockEntity(controllerPos);
             if (controllerEntity instanceof DeepDrillEntity deepDrill && !deepDrill.init(true)) {
-                player.sendMessage(Text.translatable("message.oritech.deep_drill.ore_placement"));
+                player.sendMessage(Text.translatable("message.oritech.deep_drill.ore_placement"), false);
                 return ActionResult.SUCCESS;
             } else {
                 return controllerBlock.getBlock().onUse(controllerBlock, world, controllerPos, player, hit);

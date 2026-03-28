@@ -44,7 +44,15 @@ public class SmallTankEntity extends NetworkedBlockEntity implements FluidApi.Bl
     
     private ApiLookupCache<FluidApi.FluidStorage> downLookupCache;
     
-    public final InOutInventoryStorage inventory = new InOutInventoryStorage(3, this::setChanged, new InventorySlotAssignment(0, 2, 2, 1));
+    public final InOutInventoryStorage inventory = new InOutInventoryStorage(3, this::setChanged, new InventorySlotAssignment(0, 2, 2, 1)) {
+        @Override
+        // Prevents pipes from inserting multiple empty items and plugging up the tank
+        // Does not affect GUI interactions. That would require overriding some more Container methods
+        public int getSlotLimit(int slot) {
+            if (this.slotAssignment.isInput(slot)) return 1;
+            return super.getSlotLimit(slot);
+        }
+    };
     
     @SyncField({SyncType.TICK, SyncType.INITIAL})
     public final SimpleFluidStorage fluidStorage = new SimpleFluidStorage(Oritech.CONFIG.portableTankCapacityBuckets() * FluidStackHooks.bucketAmount(), this::setChanged);
@@ -122,9 +130,8 @@ public class SmallTankEntity extends NetworkedBlockEntity implements FluidApi.Bl
     // from block entity to item
     private void processInput() {
         var inStack = inventory.getItem(0);
-        var canFill = this.fluidStorage.getAmount() > 0;
         
-        if (!canFill || inStack.isEmpty() || inStack.getCount() > 1) return;
+        if (inStack.isEmpty() || inStack.getCount() > 1) return;
         
         var stackRef = new StackContext(inStack, updated -> inventory.setItem(0, updated));
         var candidate = FluidApi.ITEM.find(stackRef);
@@ -148,9 +155,8 @@ public class SmallTankEntity extends NetworkedBlockEntity implements FluidApi.Bl
     // from item to fluid storage
     private void processOutput() {
         var inStack = inventory.getItem(1);
-        var canFill = this.fluidStorage.getAmount() < this.fluidStorage.getCapacity();
         
-        if (!canFill || inStack.isEmpty() || inStack.getCount() > 1) return;
+        if (inStack.isEmpty() || inStack.getCount() > 1) return;
         
         var stackRef = new StackContext(inStack, updated -> inventory.setItem(1, updated));
         var candidate = FluidApi.ITEM.find(stackRef);

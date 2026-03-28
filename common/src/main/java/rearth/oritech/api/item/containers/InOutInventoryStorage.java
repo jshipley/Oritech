@@ -5,7 +5,7 @@ import rearth.oritech.util.InventorySlotAssignment;
 
 public class InOutInventoryStorage extends SimpleInventoryStorage {
     
-    private final InventorySlotAssignment slotAssignment;
+    protected final InventorySlotAssignment slotAssignment;
     
     public InOutInventoryStorage(int size, Runnable onUpdate, InventorySlotAssignment slotAssignment) {
         super(size, onUpdate);
